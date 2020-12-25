@@ -1,22 +1,18 @@
+///////ojo: no puedo ignorar(.gitignore) los archivos que estan guardados en el repositorio
 //requerir paquetes
 const express = require('express');
+const passport = require('passport')
 const app = express();
 const auth = require('./components/auth/network')
 
-const connectDB=require('../network/db')
-
 require('dotenv').config();
-///connect database
-connectDB(
-    process.env.DB_HOST,
-    process.env.DB_USER,
-    process.env.DB_PASS
-    )
+
 
 //// middleware
-
+app.use(express.json());
+app.use(passport.initialize());
 ///routes
-app.use('/',auth)
+app.use('/auth',auth)
 
 app.listen(process.env.PORT,()=>{
     console.log(`Listen on port ${process.env.PORT}`);

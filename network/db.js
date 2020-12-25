@@ -1,10 +1,12 @@
 const mysql = require('mysql');
 
-async function connect(host,user,pass){
-    let con = await mysql.createConnection({
-        host:host,
-        user:user,
-        password:pass
+require('dotenv').config();
+//async function connect(host,user,pass,db){
+    var con = mysql.createConnection({
+        host:process.env.DB_HOST,
+        user:process.env.DB_USER,
+        password:process.env.DB_PASS,
+        database:process.env.DB_NAME
     });
 
     con.connect((err)=>{
@@ -13,6 +15,6 @@ async function connect(host,user,pass){
         }
         console.log('DB Connected!');
     })
-}
+//}
 
-module.exports= connect;
+module.exports= con;
