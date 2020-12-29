@@ -16,7 +16,8 @@ passport.use('register', new LocalStrategy({
          //Una forma de queries en backend usando comillas invertdas y sin parametro en funcion connectDB.query
         let query = `SELECT email FROM users WHERE email="${email}"`;
         connectDB.query(query, async function (err, data, fields) {
-            if (data) {
+            //console.log(data.length);
+            if (data.length !==0) {
                 console.log('There is an error!! that email is registered');
                 return cb(err, null);
             } else {
@@ -55,7 +56,8 @@ passport.use('login', new LocalStrategy({
     //Una forma de queries en backend con signo al final y parametro en la funcion 'connectDB.query'
         let query = `SELECT * FROM users WHERE email=?`;
         connectDB.query(query,email,async function(err,data,fields){
-            if(!data){
+            console.log(data.length);
+            if(data.length === 0){
                 console.log(' That user is not registered or bad');
                 return cb(err,null);
             }else{

@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const passport = require('passport');
 const response = require('../../../network/response')
+const jwtAuth = require('../../../auth/authenticate/jwtAuth');
 
 require('../../../auth/strategies/localStrategi')
 
@@ -19,22 +20,24 @@ function register(req,res){
 }
 function login(req,res,next){
     passport.authenticate('login',(err,user)=>{
-        console.log(user);
+        console.log('user==> '+user);
         try{
             if(err || !user){
                 response.error(res,'An Error has ocurred');
                 return next(err);
             }
             req.login(user,{session:false} ,(error)=>{
-                if(err) return next(error);
+                if(error) return next(error);
                 
                 const body={
                     id:user[0].id,
-                    name: user[0].name,
+                    email: user[0].email,
                     username: user[0].username,
-                    password: user[0].password
                 }
-                response.success(res,body,200);
+
+                let token = jwtAuth.sign({user: body});
+                console.log(token);
+                return response.success(res,{info:body,token},200);
 
             })
 
